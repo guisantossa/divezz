@@ -1,111 +1,91 @@
-# Splitwise Clone
+# Divezz
 
-This project is a clone of the popular expense tracking application, Splitwise. It is built using FastAPI for the backend and React with TypeScript for the frontend. The application allows users to manage their expenses, groups, and settlements in a user-friendly interface.
+Divezz é uma aplicação para gerenciar despesas compartilhadas (clone estilo Splitwise). Este repositório contém o frontend (React + Vite) e o backend (FastAPI + SQLAlchemy + Alembic).
 
-## Features
+## Estrutura do repositório
+- `frontend/` — aplicação React (Vite)
+- `backend/` — API FastAPI, modelos e migrações (Alembic)
+- `migrations/` — versões Alembic (separado sob `backend/migrations` também)
+- `.env` — arquivo de configuração (não comitar valores sensíveis)
 
-- User authentication (registration and login)
-- Group management (create, update, delete groups)
-- Expense management (add, view, and manage expenses)
-- Settlement management between users
-- Responsive design using TailwindCSS
-- Interactive charts for expense visualization using Recharts
+## Pré-requisitos
+- Node.js >= 18, npm
+- Python 3.11
+- Poetry (opcional, usado no backend)
+- Docker (opcional, para containers)
+- Um banco de dados PostgreSQL (ou ajuste DATABASE_URL para seu DB)
 
-## Tech Stack
+## Configuração rápida (desenvolvimento)
 
-### Backend
-- **FastAPI**: A modern web framework for building APIs with Python 3.11+
-- **PostgreSQL**: A powerful, open-source relational database
-- **SQLAlchemy**: SQL toolkit and Object-Relational Mapping (ORM) system for Python
-- **Alembic**: Database migration tool for SQLAlchemy
-- **Pydantic**: Data validation and settings management using Python type annotations
-- **JWT**: JSON Web Tokens for secure authentication
-- **Pytest**: Testing framework for Python
+1. Clonar repositório
+   - PowerShell:
+     git clone <seu-repo-url>
+     cd splitwise-clone
 
-### Frontend
-- **React**: A JavaScript library for building user interfaces
-- **TypeScript**: A typed superset of JavaScript that compiles to plain JavaScript
-- **Vite**: A fast build tool and development server
-- **TailwindCSS**: A utility-first CSS framework for rapid UI development
-- **shadcn/ui**: A component library for building UI components
-- **TanStack Query**: A powerful data-fetching library for React
-- **react-hook-form**: A library for managing forms in React
-- **Zod**: A TypeScript-first schema declaration and validation library
-- **Lucide-react**: A collection of customizable icons for React
-- **Recharts**: A composable charting library built on React components
+2. Backend
+   - Entrar na pasta:
+     cd backend
+   - Criar ambiente e instalar dependências:
+     - Com Poetry:
+       poetry install
+     - Ou com pip (se preferir virtualenv):
+       python -m venv .venv
+       .\.venv\Scripts\Activate
+       pip install -r requirements.txt
+   - Ajustar variáveis de ambiente:
+     - Copie `.env.example` (se houver) para `.env` e configure `DATABASE_URL` sem expor segredos.
+   - Rodar migrações (Alembic):
+     poetry run alembic upgrade head
+     (ou: alembic upgrade head se estiver no venv)
+   - Subir a API:
+     poetry run uvicorn app.main:app --reload --port 8000
+   - A API ficará disponível em: http://localhost:8000
 
-## Getting Started
+3. Frontend
+   - Entrar na pasta:
+     cd frontend
+   - Instalar dependências:
+     npm ci
+   - Rodar em modo dev:
+     npm run dev
+   - App no navegador (Vite): normalmente http://localhost:5173
 
-### Prerequisites
+## Docker
+- Backend Dockerfile já presente em `backend/Dockerfile`.
+  - Build:
+    docker build -t divezz-backend -f backend/Dockerfile backend
+  - Run:
+    docker run --rm -p 8000:8000 --env-file backend/.env divezz-backend
+- Frontend Dockerfile já presente em `frontend/Dockerfile` (multistage com nginx).
+  - Build:
+    docker build -t divezz-frontend -f frontend/Dockerfile frontend
+  - Run:
+    docker run --rm -p 3000:80 divezz-frontend
 
-- Python 3.11+
-- Node.js (version 16 or higher)
-- PostgreSQL
-- Docker (optional)
+Observação: não coloque credenciais sensíveis diretamente nos Dockerfiles nem no repositório. Use `.env` ou secrets no seu orquestrador.
 
-### Backend Setup
+## Migrações
+- Criar revisão:
+  poetry run alembic revision --autogenerate -m "mensagem"
+- Aplicar:
+  poetry run alembic upgrade head
+- Reverter:
+  poetry run alembic downgrade -1
 
-1. Navigate to the `backend` directory:
-   ```bash
-   cd backend
-   ```
+## Testes
+- Backend (pytest):
+  cd backend
+  poetry run pytest
 
-2. Install the required Python packages:
-   ```bash
-   pip install -r requirements.txt
-   ```
+## Boas práticas
+- Nunca commitar `.env` com credenciais.
+- Usar S3/Cloud storage para imagens em produção; para desenvolvimento pode-se usar `backend/static/uploads`.
+- Ative `pool_pre_ping=True` no SQLAlchemy engine em produção para maior resiliência a conexões mortas.
 
-3. Set up the database:
-   - Create a PostgreSQL database and update the database URL in `backend/app/core/config.py`.
+## Contribuição
+- Abra issues descrevendo bugs/novas features.
+- Faça branches por tarefa/feature.
+- Submeta PR com descrição e testes quando possível.
 
-4. Run migrations:
-   ```bash
-   alembic upgrade head
-   ```
-
-5. Start the FastAPI application:
-   ```bash
-   uvicorn app.main:app --reload
-   ```
-
-### Frontend Setup
-
-1. Navigate to the `frontend` directory:
-   ```bash
-   cd frontend
-   ```
-
-2. Install the required Node packages:
-   ```bash
-   npm install
-   ```
-
-3. Start the Vite development server:
-   ```bash
-   npm run dev
-   ```
-
-## Running Tests
-
-### Backend Tests
-
-To run the backend tests, navigate to the `backend` directory and run:
-```bash
-pytest
-```
-
-### Frontend Tests
-
-To run the frontend tests, navigate to the `frontend` directory and run:
-```bash
-npm test
-```
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
-
-## Acknowledgments
-
-- Inspired by Splitwise for its user-friendly design and functionality.
-- Thanks to the open-source community for the libraries and tools used in this project.
+## Contato
+- Projeto mantido localmente. Para dúvidas sobre execução ou erros, cole logs e o trecho relevante do código.
