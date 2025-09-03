@@ -1,0 +1,69 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+backend/.venv/
+
+# Packaging / distribution
+build/
+dist/
+*.egg-info/
+.eggs/
+wheels/
+pip-wheel-metadata/
+
+# Tests / coverage
+.pytest_cache/
+.coverage
+coverage/
+htmlcov/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+logs/
+*.log
+
+# Environment files
+.env
+.env.*.local
+.env.example
+
+# Node / frontend
+node_modules/
+frontend/node_modules/
+dist/
+build/
+.vite/
+.vitest/
+
+# Lockfiles (keep if you commit them, otherwise ignore)
+# package-lock.json
+# yarn.lock
+
+# IDEs / editors
+.vscode/
+.idea/
+*.iml
+*.sublime-project
+*.sublime-workspace
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+*.pyc
+__pypackages__/
+coverage-final.json
